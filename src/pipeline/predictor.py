@@ -14,4 +14,4 @@ class Predictor(BaseEstimator, ClassifierMixin, metaclass=Singleton):
         return self
 
     def predict(self, data):
-        return self.model.predict(data)
+        return data, self.model.predict(data)

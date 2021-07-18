@@ -1,0 +1,25 @@
+name: run train pipeline
+
+entry_points:
+  data_loading:
+    parameters:
+      output_path: string
+    command: python3 scripts/data_loading.py --output-path {output_path}
+  pre_processing:
+    parameters:
+      input_path: string
+      output_path: string
+    command: python3 scripts/pre_processing.py --input-path {input_path} --output-path {output_path}
+  train_model:
+    parameters:
+      input_path: string
+      model_path: string
+      model_name: string
+    command: python3 scripts/train_model.py --input-path {input_path} --model-path {model_path} --model-name {model_name}
+  main:
+    parameters:
+      raw_data: {type: string, default: data/raw}
+      processed_data: {type: string, default: data/processed}
+      model_path: {type: string, default: models}
+      model_name: {type: string, default: tf_cnn}
+    command: python3 scripts/main.py --raw-data {raw_data} --processed-data {processed_data} --model-path {model_path} --model-name {model_name}

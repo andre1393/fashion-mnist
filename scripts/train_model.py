@@ -2,6 +2,7 @@ import os
 import argparse
 import logging
 
+import mlflow
 from tensorflow.keras import models, layers
 
 from utils import load_npy_files, save_tf_model
@@ -71,8 +72,12 @@ def train_model(model, x_train, y_train, x_test, y_test):
 def main(input_path, model_path, model_name):
     x_train, y_train, x_test, y_test = load_npy_files(input_path, ['x_train', 'y_train', 'x_test', 'y_test'])
     x_train_reshaped, x_test_reshaped = reshape_features(x_train, x_test)
+
+    mlflow.tensorflow.autolog()
     model = train_model(build_cnn(), x_train_reshaped, y_train, x_test_reshaped, y_test)
-    save_tf_model(model, os.path.join(model_path, model_name))
+
+    saved_model_name = os.path.join(model_path, model_name)
+    save_tf_model(model, saved_model_name)
 
 
 if __name__ == '__main__':
