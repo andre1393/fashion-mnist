@@ -65,7 +65,7 @@ def train_model(model, x_train, y_train, x_test, y_test):
 
     :return:
     """
-    model.fit(x_train, y_train, epochs=2, batch_size=1000, verbose=True, validation_data=(x_test, y_test))
+    model.fit(x_train, y_train, epochs=20, batch_size=1000, verbose=True, validation_data=(x_test, y_test))
     return model
 
 
