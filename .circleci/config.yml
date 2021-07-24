@@ -8,6 +8,7 @@ workflows:
   build-and-deploy:
     jobs:
       - aws-ecr/build-and-push-image:
+          context: deploy
           repo: fashion-mnist
           tag: "${CIRCLE_SHA1}"
           filters:
@@ -15,6 +16,7 @@ workflows:
               only:
                 - main
       - aws-ecs/deploy-service-update:
+          context: deploy
           requires:
             - aws-ecr/build-and-push-image
           filters:
