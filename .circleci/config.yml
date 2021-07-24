@@ -23,6 +23,6 @@ workflows:
             branches:
               only:
                 - main
-          family: fashion-mnist-service
-          cluster-name: fashion-mnist
-          container-image-name-updates: "container=fashion-mnist-service,tag=${CIRCLE_SHA1}"
+          family: fashion-mnist-task
+          cluster-name: $ECS_CLUSTER_NAME
+          container-image-name-updates: "container=fashion-mnist,tag=${CIRCLE_SHA1}"
