@@ -1,11 +1,12 @@
 import os
 import argparse
 import logging
+import numpy as np
 
 import mlflow
 from tensorflow.keras import models, layers
 
-from utils import load_npy_files, save_tf_model
+from utils import load_npy_files, save_tf_model, save_npy_files
 
 logger = logging.getLogger(__name__)
 
@@ -55,27 +56,33 @@ def build_cnn():
 
 
 def reshape_features(x_train, x_test):
+    """
+    reshape features
+
+    :param x_train: x_train dataset
+    :param x_test: x_test dataset
+    :return: x_train and x_test reshaped
+    """
     return x_train.reshape(60000, 28, 28, 1), x_test.reshape(10000, 28, 28, 1)
 
 
 def train_model(model, x_train, y_train, x_test, y_test):
-    """Train the model
+    """
+    Train the model
 
-    Using GPU really speeds up this code
-
-    :return:
+    :return: trained model
     """
     model.fit(x_train, y_train, epochs=20, batch_size=1000, verbose=True, validation_data=(x_test, y_test))
     return model
 
 
-def main(input_path, model_path, model_name):
+def main(input_path, model_path, model_name, test_size):
     x_train, y_train, x_test, y_test = load_npy_files(input_path, ['x_train', 'y_train', 'x_test', 'y_test'])
     x_train_reshaped, x_test_reshaped = reshape_features(x_train, x_test)
 
     mlflow.tensorflow.autolog()
     model = train_model(build_cnn(), x_train_reshaped, y_train, x_test_reshaped, y_test)
-
+    save_npy_files('tests/data/', [[np.argmax(x) for x in model.predict(x_test_reshaped)][:test_size]], ['predictions'])
     saved_model_name = os.path.join(model_path, model_name)
     save_tf_model(model, saved_model_name)
 
@@ -85,5 +92,7 @@ if __name__ == '__main__':
     parser.add_argument('--input-path', help='path where datasets are loaded from', default='data/processed')
     parser.add_argument('--model-path', help='path where trained model is saved', default='models')
     parser.add_argument('--model-name', help='model name', default='tf_cnn')
+    parser.add_argument('--test-size', help='test dataset size for unit test', default=10)
+
     args = parser.parse_args()
     main(**vars(args))

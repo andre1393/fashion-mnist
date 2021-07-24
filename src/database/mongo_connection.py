@@ -19,9 +19,21 @@ class DBConnection(metaclass=Singleton):
         )
 
     def _get_database(self):
+        """ get database
+
+        :return: database client object
+        """
         return self.client['fashion-mnist']
 
     def save_request_info(self, request_id, raw, processed, predictions):
+        """ Save request_id, raw, processed and predictions on mongoDB
+
+        :param request_id: request id
+        :param raw: raw data (input)
+        :param processed: processed data
+        :param predictions: predictions
+        :return: None
+        """
         db = self._get_database()
         logger.info(f'saving raw_data, processed_data and predictions for {len(raw)} predictions')
         db['predictions'].insert_many([

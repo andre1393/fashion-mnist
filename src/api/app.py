@@ -16,11 +16,17 @@ app = FastAPI()
 
 @app.get('/health', status_code=200)
 def health_check():
+    """application health check"""
     return JSONResponse({"status": "healthy"})
 
 
 @app.post('/predict')
 async def predict(request: Request):
+    """
+    Use input from request to transform data and make predictions, at the end parse prediction to class name
+    :param request: API request object
+    :return: predictions class names serialized as json
+    """
     raw_data = (await request.json())['data']
     processed_data, predictions = PredictPipeline.get_pipeline().predict(raw_data)
     DBConnection(DB_SETTINGS).save_request_info(
