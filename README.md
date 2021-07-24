@@ -1,6 +1,19 @@
 # fashion-mnist
 Project to deploy a machine learning model from a notebook based on fashion mnist dataset
 
+  * [1. Description](#1-description)
+    + [1.1 dataset](#11-dataset)
+    + [1.2 notebook](#12-notebook)
+  * [2. Solution](#2-solution)
+    + [2.1 Project structure](#21-project-structure)
+    + [2.2 Deliverables](#22-deliverables)
+    + [2.3 Steps to deploy the model](#23-steps-to-deploy-the-model)
+    + [2.4 Training the model](#24-training-the-model)
+    + [2.5 Serving the model](#25-serving-the-model)
+      - [2.5.1 Run application](#251-run-application)
+      - [2.5.2 Test predictions](#252-test-predictions)
+    + [2.6 unit tests](#26-unit-tests)
+  
 ## 1. Description
 ### 1.1 dataset
 https://www.tensorflow.org/datasets/catalog/fashion_mnist
@@ -30,7 +43,8 @@ In this documentation I will refer to the service that serves the model as `pred
   * api: codes related to api
   * pipeline: codes related to the prediction pipeline (pre-processing and training)
   * serializers: codes related to data serialization
-* images: images used in README documentation   
+* docs: images used in README documentation
+* tests: unit tests
 
 ### 2.2 Deliverables
 * Training scripts
@@ -41,7 +55,7 @@ In this documentation I will refer to the service that serves the model as `pred
 * docker-compose.yaml that runs both the preditor service and MongoDB
 
 ### 2.3 Steps to deploy the model
-![alt text](images/architecture.png)
+![alt text](docs/images/architecture.png)
 
 ### 2.4 Training the model
 ```
@@ -51,14 +65,14 @@ pipenv run mlflow run --no-conda --experiment-name fashion-mnist .
 The command above will train the model by running the scripts `data_loading.py`, `pre_processing.py` and `train_model.py` and then log experiment on MLflow.
 The experiment on MLflow should look like the following:
 
-![alt text](images/mlflow_example1.png)
+![alt text](docs/images/mlflow_example1.png)
 
-![alt text](images/mlflow_example2.png)
+![alt text](docs/images/mlflow_example2.png)
 
 ### 2.5 Serving the model
 This application serves a `/predict` api that accepts post requests with a list of inputs and return a list of the predictions
 
-![alt text](images/predictions.png)
+![alt text](docs/images/predictions.png)
 
 #### 2.5.1 Run application
 
@@ -115,3 +129,10 @@ Expected result:
     ]
 }
 ````
+
+### 2.6 unit tests
+
+```shell
+pipenv install --dev
+pipenv run pytest
+```
