@@ -26,3 +26,5 @@ workflows:
           family: fashion-mnist-task
           cluster-name: $ECS_CLUSTER_NAME
           container-image-name-updates: "container=fashion-mnist,tag=${CIRCLE_SHA1}"
+          force-new-deployment: true
+          service-name: fashion-mnist-service
