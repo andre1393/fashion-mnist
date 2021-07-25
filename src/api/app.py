@@ -29,9 +29,15 @@ async def predict(request: Request):
     """
     raw_data = (await request.json())['data']
     processed_data, predictions = PredictPipeline.get_pipeline().predict(raw_data)
-    #DBConnection(DB_SETTINGS).save_request_info(
-    #    request.headers.get('request-id', str(uuid.uuid4())), raw_data, processed_data.tolist(), predictions.tolist()
-    #)
+    try:
+        DBConnection(DB_SETTINGS).save_request_info(
+            request.headers.get('request-id', str(uuid.uuid4())),
+            raw_data,
+            processed_data.tolist(),
+            predictions.tolist()
+        )
+    except Exception as e:
+        logger.warning(f'unable to connect with database: {str(e)}')
     return ResponseSerializer(names=True).serialize(predictions)
 
 

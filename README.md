@@ -30,7 +30,8 @@ In this documentation I will refer to the service that serves the model as `pred
 | --- |
 | I used MongoDB to store both input data and predictions because it is the best database (that I know) to store this type of data (n dimensional arrays) |
 | Ideally the predictor service would be as simple as possible, which means it would not integrate with database, it could either send events or have middleware to do this integration. I saved predictions directly from predictor service to make implementation easier |
-| Ideally the binary model would not be committed to github, there are better solutions to store it, for example S3. I saved on github to make implementation easier
+| Ideally the binary model would not be committed to github, there are better solutions to store it, for example S3. I saved on github to make implementation easier |
+| ECS cluster and service was created manually, ideally Terraform could be used |
 
 ### 2.1 Project structure
 * data: directory where data is saved during training step
